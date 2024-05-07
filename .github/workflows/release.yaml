@@ -1,0 +1,33 @@
+  name: Release workflow
+  on:
+    push:
+      branches:
+        - main
+  jobs:
+    checkout:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            persist-credentials: false
+            fetch-depth: 0
+    increment_version:
+      runs-on: ubuntu-latest
+      steps:
+        - run: ./increment_version.sh --${VERSION_TYPE}
+      needs: [checkout]
+    commit:
+      runs-on: ubuntu-latest
+      steps:
+        - run: |
+            git config --local user.email "be-meet-bot@example.com"
+            git config --local user.name "be-meet-bot"
+            git commit -a -m "Incremented version"
+      needs: [increment_version]
+    push:
+      name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+      needs: [commit]

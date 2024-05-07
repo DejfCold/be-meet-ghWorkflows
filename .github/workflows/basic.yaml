@@ -1,0 +1,12 @@
+  name: basic workflow
+  on: push
+  jobs:
+    base_job:
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "First job works!"
+    depending_job:
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "Another job!"
+      needs: [base_job]
