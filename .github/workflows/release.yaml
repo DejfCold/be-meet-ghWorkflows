@@ -9,8 +9,8 @@
       steps:
         - name: Install git
           run: |
-            apt-get update -y
-            apt-get install git -y
+            apt update -y
+            apt install git -y
         - name: Checkout
           uses: actions/checkout@v4
           with:
