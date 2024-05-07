@@ -1,0 +1,7 @@
+  name: test 1
+  on: push
+  jobs:
+    job1:
+      runs-on: alpine:latest
+      steps:
+        - run: echo "hello world"
