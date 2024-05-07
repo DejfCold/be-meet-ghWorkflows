@@ -9,8 +9,12 @@
       steps:
         - name: Install git
           run: |
-            apt update -y
-            apt install git -y
+            if ! git --version &>/dev/null; then
+              sudo apt update -y
+              sudo apt install git -y
+            else
+              echo "git is already installed"
+            fi
         - name: Checkout
           uses: actions/checkout@v4
           with:
