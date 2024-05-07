@@ -3,7 +3,7 @@
 set -ex
 
 # Path to the .api_key file
-API_KEY_FILE=".api_key"
+API_KEY_FILE="../.api_key"
 
 # Check if the .api_key file exists
 if [ -f "$API_KEY_FILE" ]; then
@@ -26,7 +26,12 @@ fi
 
 # run failing workflow
 act \
-  --secret GITHUB_TOKEN=${API_KEY} \ # replace with your github api key
+  --secret GITHUB_TOKEN=${API_KEY} \
   --var VERSION_TYPE=patch \
   --workflows .github/workflows/release.yaml
 
+# run failing workflow
+#act \
+#  --secret GITHUB_TOKEN=${API_KEY} \ # replace with your github api key
+#  --var VERSION_TYPE=patch \
+#  --workflows .github/workflows/release.yaml

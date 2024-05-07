@@ -4,30 +4,28 @@
       branches:
         - main
   jobs:
-    checkout:
+    Release:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v4
+        - name: Install git
+          run: |
+            apt-get update -y
+            apt-get install git -y
+        - name: Checkout
+          uses: actions/checkout@v4
           with:
             persist-credentials: false
             fetch-depth: 0
-    increment_version:
-      runs-on: ubuntu-latest
-      steps:
-        - run: ./increment_version.sh --${VERSION_TYPE}
-      needs: [checkout]
-    commit:
-      runs-on: ubuntu-latest
-      steps:
-        - run: |
+        - name: Increment version
+          run: ./increment_version.sh --major
+        - name: Commit
+          run: |
             git config --local user.email "be-meet-bot@example.com"
             git config --local user.name "be-meet-bot"
-            git commit -a -m "Incremented version"
-      needs: [increment_version]
-    push:
-      name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
-      needs: [commit]
+            git add version.txt
+            git commit -m "Incremented version"
+        - name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
